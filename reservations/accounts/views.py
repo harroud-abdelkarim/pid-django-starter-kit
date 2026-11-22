@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserSignUpForm
 from django.contrib.auth.models import User
 from .forms import UserUpdateForm
+from django.contrib.auth import logout
 
 
 class UserSignUpView(UserPassesTestMixin, CreateView):
@@ -54,3 +55,23 @@ class UserUpdateView(UserPassesTestMixin, UpdateView):
             "Vous n'avez pas l'autorisation d'accéder à cette page!"
         )
         return redirect('accounts:user-profile')
+
+@login_required
+def delete(request, pk):
+    if request.method == 'POST':
+        method = request.POST.get('_method', '').upper()
+
+        if method == 'DELETE':
+            if request.user.id == pk:
+                user = User.objects.get(id=request.user.id)
+                user.delete()
+
+                messages.success(request, "Utilisateur supprimé avec succès.")
+                logout(request)
+            else:
+                messages.error(request, "Suppression d'un autre compte interdite!")
+
+            return redirect('home')
+
+    messages.error(request, "Suppression interdite (méthode incorrecte)!")
+    return redirect('home')
