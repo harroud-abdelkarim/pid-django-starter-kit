@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -5,21 +6,31 @@
     <title>Projet réservations - {% block title %}Bienvenue{% endblock %}</title>
 </head>
 <body>
-
-    <div id="notification">
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                    {{ message }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-</div>
-
     <div class="container">
-        {% block content %}{% endblock %}
+        <header>
+            <div style="float:right">
+                <p>Vous n'êtes pas connecté.</p>
+                <p><a href="{% url 'login' %}">Se connecter</a></p>
+            </div>
+        </header>
+
+        <main>
+            <div id="notification">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>&copy; Projet Réservations - EPFC / ICC</footer>
     </div>
 </body>
 </html>
