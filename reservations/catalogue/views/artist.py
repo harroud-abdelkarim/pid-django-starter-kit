@@ -1,8 +1,9 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
 from catalogue.models import Artist
+from catalogue.forms import ArtistForm
 
 
 def index(request):
@@ -26,4 +27,51 @@ def show(request, artist_id):
     return render(request, 'artist/show.html', {
         'artist': artist,
         'title': title
+    })
+
+
+def edit(request, artist_id):
+    artist = Artist.objects.get(id=artist_id)
+    form = ArtistForm(request.POST or None, instance=artist)
+
+    if request.method == 'POST':
+        method = request.POST.get('_method', '').upper()
+
+        if method == 'PUT':
+            if form.is_valid():
+                form.save()
+
+                return render(request, 'artist/show.html', {
+                    'artist': artist,
+                })
+
+    return render(request, 'artist/edit.html', {
+        'form': form,
+        'artist': artist,
+    })
+
+def create(request):
+    form = ArtistForm(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('catalogue:artist-index')
+
+    return render(request, 'artist/create.html', {
+        'form': form,
+    })
+
+def delete(request, artist_id):
+    artist = get_object_or_404(Artist, id=artist_id)
+
+    if request.method == 'POST':
+        method = request.POST.get('_method', '').upper()
+
+        if method == 'DELETE':
+            artist.delete()
+            return redirect('catalogue:artist-index')
+
+    return render(request, 'artist/show.html', {
+        'artist': artist,
     })
