@@ -1,0 +1,42 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$8TbHPJBD2UGTjZg1Ro78gs$hj/Nt4jSKYXyX9uQ9DzhZg0FR+hpaZFDyP3ZvkC0L5A=",
+        "last_login": "2026-11-22T17:49:16Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "bob@sull.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-11-22T17:16:29Z",
+        "groups": [
+            1
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$KQSAis2LvvIFCBD40r8NnT$1XJ2Y2iLGZVHYEIxNqXi7kdhmM9qE45Tn85ZLaIU3bM=",
+        "last_login": "2026-11-22T17:39:29Z",
+        "is_superuser": false,
+        "username": "anna",
+        "first_name": "anna",
+        "last_name": "lyse",
+        "email": "anna.lyse@sull.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-11-22T17:36:53Z",
+        "groups": [
+            2
+        ],
+        "user_permissions": []
+    }
+}
+]
