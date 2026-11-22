@@ -4,6 +4,7 @@ from django.http import Http404
 
 from catalogue.models import Artist
 from catalogue.forms import ArtistForm
+from django.contrib import messages
 
 
 def index(request):
@@ -40,10 +41,13 @@ def edit(request, artist_id):
         if method == 'PUT':
             if form.is_valid():
                 form.save()
+                messages.success(request, "Artiste modifié avec succès.")
 
                 return render(request, 'artist/show.html', {
                     'artist': artist,
                 })
+
+            messages.error(request, "Échec de la modification de l'artiste !")
 
     return render(request, 'artist/edit.html', {
         'form': form,
@@ -56,7 +60,9 @@ def create(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            messages.success(request, "Artiste ajouté avec succès.")
             return redirect('catalogue:artist-index')
+        messages.error(request, "Échec de l'ajout de l'artiste !")
 
     return render(request, 'artist/create.html', {
         'form': form,
@@ -70,7 +76,10 @@ def delete(request, artist_id):
 
         if method == 'DELETE':
             artist.delete()
+            messages.success(request, "Artiste supprimé avec succès.")
             return redirect('catalogue:artist-index')
+
+    messages.error(request, "Échec de la suppression de l'artiste !")
 
     return render(request, 'artist/show.html', {
         'artist': artist,
