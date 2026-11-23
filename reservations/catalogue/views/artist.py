@@ -5,6 +5,7 @@ from django.http import Http404
 from catalogue.models import Artist
 from catalogue.forms import ArtistForm
 from django.contrib import messages
+from django.conf import settings
 
 
 def index(request):
@@ -32,6 +33,8 @@ def show(request, artist_id):
 
 
 def edit(request, artist_id):
+    if not request.user.is_authenticated or not request.user.has_perm('catalogue.change_artist'):
+        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
     artist = Artist.objects.get(id=artist_id)
     form = ArtistForm(request.POST or None, instance=artist)
 
@@ -55,6 +58,8 @@ def edit(request, artist_id):
     })
 
 def create(request):
+    if not request.user.is_authenticated or not request.user.has_perm('catalogue.add_artist'):
+        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
     form = ArtistForm(request.POST or None)
 
     if request.method == 'POST':
@@ -69,6 +74,8 @@ def create(request):
     })
 
 def delete(request, artist_id):
+    if not request.user.is_authenticated or not request.user.has_perm('catalogue.delete_artist'):
+        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
     artist = get_object_or_404(Artist, id=artist_id)
 
     if request.method == 'POST':
