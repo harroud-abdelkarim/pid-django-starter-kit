@@ -6,6 +6,7 @@ from catalogue.models import Artist
 from catalogue.forms import ArtistForm
 from django.contrib import messages
 from django.conf import settings
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 def index(request):
@@ -31,10 +32,9 @@ def show(request, artist_id):
         'title': title
     })
 
-
+@login_required
+@permission_required('catalogue.change_artist', raise_exception=True)
 def edit(request, artist_id):
-    if not request.user.is_authenticated or not request.user.has_perm('catalogue.change_artist'):
-        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
     artist = Artist.objects.get(id=artist_id)
     form = ArtistForm(request.POST or None, instance=artist)
 
@@ -57,9 +57,9 @@ def edit(request, artist_id):
         'artist': artist,
     })
 
+@login_required
+@permission_required('catalogue.add_artist', raise_exception=True)
 def create(request):
-    if not request.user.is_authenticated or not request.user.has_perm('catalogue.add_artist'):
-        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
     form = ArtistForm(request.POST or None)
 
     if request.method == 'POST':
@@ -73,9 +73,9 @@ def create(request):
         'form': form,
     })
 
+@login_required
+@permission_required('catalogue.delete_artist', raise_exception=True)
 def delete(request, artist_id):
-    if not request.user.is_authenticated or not request.user.has_perm('catalogue.delete_artist'):
-        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
     artist = get_object_or_404(Artist, id=artist_id)
 
     if request.method == 'POST':
